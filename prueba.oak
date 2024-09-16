@@ -1,0 +1,14 @@
+float resta=7-5; 
+resta="cadena";
+System.out.println("cadena1");
+System.out.println(5*9);
+System.out.println(1);
+System.out.println('c');
+var num1 = parseInt("1.99999");
+var num2 = 23;
+System.out.println(toString(num1) + toString(num2)); 
+System.out.println(toString(true)+"false"); 
+String cadena = toString(false) + "->" + toString(num1);
+System.out.println(cadena);
+System.out.println((2+6)>(8-4) && (2+6)<(8-4));
+System.out.println(!(2+6)<(8-4));

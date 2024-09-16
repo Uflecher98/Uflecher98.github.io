@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width-device-width, initial-scale-1.0">
+    <title> OakLand Project</title>
+
+
+    <link rel="stylesheet" href="estilos.css">
+
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <h1>OakLand Project</h1>
+        </header>
+
+        <ul class="nav-menu">
+            <li>
+                <button>Nuevo</button>
+            </li>
+            <li>
+                <button>Reportes</button>
+            </li>
+            <li>
+                <label>Cargar archivo:</label>
+                <input type="file" id="btnCargar" />
+
+            </li>
+
+  
+        </ul>
+    </div>
+
+    <div class="editor">
+
+        <div class="Ingreso">
+            <textarea id="Ingreso" id="" cols="100" rows="20"></textarea>
+            <script>
+                const archivoOak = document.querySelector("#btnCargar");
+                const resultado = document.querySelector("#Ingreso");
+
+                function leerArchivo(file){
+                    return new Promise( (resolve, reject)=> {
+                        if(!file.name.endsWith(".oak")){
+                            reject("Extension de archivo no admitida")
+                        } else {
+                            const freader = new FileReader()
+                            freader.readAsText(file)
+                            freader.addEventListener("load", ()=>{
+                                resolve(freader.result)
+                            }
+                        )
+                        }
+                    })
+                }
+                archivoOak.addEventListener("change", (evento)=>{
+                    const file = evento.target.files[0]
+                    leerArchivo(file)
+                     .then(contenido => resultado.textContent = contenido)
+                      //.then(contenido => Ingreso.textContent = contenido)
+                      .catch(error => resultado.textContent = error)
+                })
+            </script>
+        </div>
+
+        <div>
+            <button id="btn1">Ejecutar</button>
+        </div>
+
+        <div class="Consola">
+            <textarea id="Consola" id="" cols="100" rows="10"></textarea>
+        </div>
+    </div>
+
+    <script type="module" src="/principal.js"></script>
+
+</body>
+
+<script src="https://unpkg.com/peggy"></script>
+<script src="https://cdn.jsdelivr.net/npm/peggy"></script>
+
+</html>

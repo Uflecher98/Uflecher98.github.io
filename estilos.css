@@ -1,0 +1,60 @@
+
+body{
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    background-color: rgb(183, 238, 238);
+}
+
+.container{
+    width: 1000px;
+    margin: 0px auto;
+}
+
+.nav-menu{
+    display: flex;
+    background-color: azure;
+}
+
+.nav-menu li{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+      padding: 10px;
+      list-style: none;
+}
+
+.nav-menu ul li button{
+    background-color: beige;
+    list-style: none;
+    border: none;
+    color: antiquewhite;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+}
+
+.editor{
+   padding-top: 10px;
+   display:grid;
+   justify-content: center;
+}
+
+.Ingreso{
+    padding: 10px;
+}
+
+.Consola{
+    padding: 10px;
+}
+
+.Ingreso button hover {
+    background-color:blueviolet;
+    color: blue;
+}
