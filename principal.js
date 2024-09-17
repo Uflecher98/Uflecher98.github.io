@@ -63,6 +63,9 @@ const codigo = `float resta=7-5; resta="cadena";`;
     console.log(error +" "+ valor);
   })
 
+
+
+
   salida.value = global.getconsola();
 
 

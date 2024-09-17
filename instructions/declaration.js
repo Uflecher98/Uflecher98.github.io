@@ -19,7 +19,7 @@ class Declaracion extends Instruction {
   CHAR: "CHAR",*/
 
   execute(env) {
-    console.log("Declaracion de variable");
+    console.log("Declaracion de variable gsnfgnsgnfs");
 
     if (this.expresion == null) {
       console.log(this.tipo);

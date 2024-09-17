@@ -2,6 +2,10 @@
 
 {
 
+let arrIns = new Array();
+let paramFunciones = new Array();
+let llevaParametro;
+
   const FNATIVA_T ={
     PARSEINT: 1,
     PARSEFLOAT: 2,
@@ -37,23 +41,11 @@
 
 
 
-ID "identificador"
-  = !reservada[a-zA-Z]([a-zA-Z]/[0-9]/"_")* _ { return text(); }
 
-reservada 
-=  ParseInttkn 
-/ParseFloattkn
-/ToStringtkn
-/toLowertkn
-/toUppertkn
-/typeOftkn
-/ifToken 
-/imprimirToken 
-/tknFalse
-/tknTrue
 
 S
   =instrucciones 
+
 instrucciones
   = inst:instruccion   insts:instruccionesp 
 
@@ -62,24 +54,27 @@ instruccionesp
   / epsilon
 
 instruccion
-  = inst:declaracion 
-  / inst:asignacion
+  =   inst:asignacion
   / inst:imprimir 
   / inst:funcion
+  /inst:declaracion
 
 
 
 // ================================================================================= DECLARACION
 declaracion
   = _ type:tipo id:ID _"=" expr:expresion ";" _ {
+    console.log("============================================DECLARACION");
     const loc = location()?.start;
     return new Declaracion(loc?.line, loc?.column, id, type, expr);
   }
 /_  type:tipo id:ID _ ";" _ {
+  console.log("============================================DECLARACION");
   const loc = location()?.start;
   return new Declaracion(loc?.line, loc?.column, id, type, null);
 }
-/ _ "var" id:ID "=" expr:expresion _ ";"_ {
+/ _ "var" _  id:ID _ "="  expr:expresion  ";"_ {
+  console.log("============================================DECLARACION");
     const loc = location()?.start;
     return new Declaracion(loc?.line, loc?.column, id, null, expr);
   }
@@ -87,13 +82,14 @@ declaracion
 // ================================================================================= ASIGNACION
 asignacion
   = _ id:ID "=" _ expr:expresion ";" _ {
+    console.log("============================================ASIGNACION");
     const loc = location()?.start;
     return new Asignacion(loc?.line, loc?.column, id, expr);
   }
 
 // ================================================================================= IMPRIMIR
 imprimir 
-  = _ imprimirToken "(" expr:expresion ");"_ {  // Colocar en lugar de expresion un imprimible?
+  = _ imprimirToken "(" expr:expresion _ ");"_ {  // Colocar en lugar de expresion un imprimible?
     console.log("Entra produccion imprimir");
     const loc = location()?.start;
     return new Imprimir(loc?.line, loc?.column, expr);
@@ -109,37 +105,74 @@ imprimiblep
 imprimible
 = expresion
 
-
+  
 // ================================================================================= FUNCION
-funcion
-  = type:tipo id:ID params:f_params "{" _ inst:instruccionesf _ "}"
+
+/*La funcion puede declarse de las siguientes maneras:
+tipo  identificador 
+"void" identificador 
+
+identificador identificador 
 
 
-f_params
-  = "(" l_params ")"
 
-l_params
-  = p:param list:l_paramsp  
 
-l_paramsp
-  = "," list:l_params
+
+instrucciones
+  = inst:instruccion   insts:instruccionesp 
+
+instruccionesp
+  = insts:instrucciones 
   / epsilon
 
+instruccion
+  = inst:declaracion               */
+
+funcion
+  = _ type:tipo id:ID _params:f_params "{" _ inst:instruccionesf _ "}" {  
+    const loc = location()?.start;
+   
+    let aux = arrIns;
+    arrIns = [];
+    let auxParam = paramFunciones;
+    paramFunciones = [];
+    if (llevaParametro==0){
+      return new Funcion(loc?.line, loc?.column, id, type, null, aux);
+    } else if(llevaParametro==1){
+      return new Funcion(loc?.line, loc?.column, id, type, auxParam, aux);
+    }
+    }
+  
+f_params
+  = _ "(" l_params ")"
+
+l_params
+  = _ p:param list:l_paramsp  
+
+l_paramsp
+  = _ "," list:l_params 
+  / epsilon2
+
 param
-  = type:tipo id:ID   
+  = _ type:tipo id:ID  {
+    llevaParametro = 1; 
+    const loc = location()?.start;
+    paramFunciones.push(new Declaracion(loc?.line, loc?.column, id, type, null));}
+  / epsilon2 {llevaParametro = 0;}
 
 
 instruccionesf 
-  = inst:instruccionf list:instruccionesfp
+  = inst:instruccionf list:instruccionesfp 
 
 instruccionesfp
-  = instruccionesf instruccionesfp
-  / epsilon
+  = ins:instruccionesf  
+  / epsilon2
 
 instruccionf
-  = declaracion
-  / asignacion
+  = d:declaracion { console.log("declaracion de instruccion f"); console.log(d instanceof Declaracion); arrIns.push(d);}
+  / a:asignacion { arrIns.push(a);}
   / inst_if
+  / i:imprimir { console.log("imprimir f"); arrIns.push(i);}
 
 // ================================================================================= IF 
 inst_if
@@ -253,32 +286,32 @@ PARSEINT
 Factor
   = _ "(" _ expr:expresion_numerica ")" { return expr;}
   
-  / _ ParseInttkn "(" _ exp:expresion _ ")"
+  / _ ParseInttkn "(" _ exp:expresion ")"
   {
     const loc = location()?.start;
     return new FNativa(loc?.line,loc?.column,exp, FNATIVA_T.PARSEINT);
   }
-   / _ ParseFloattkn "(" _ exp:expresion _ ")"
+   / _ ParseFloattkn "(" _ exp:expresion  ")"
   {
     const loc = location()?.start;
     return new FNativa(loc?.line,loc?.column,exp, FNATIVA_T.PARSEFLOAT);
   }
-  / _ ToStringtkn "(" _ exp:expresion _ ")"
+  / _ ToStringtkn "(" _ exp:expresion  ")"
   {
     const loc = location()?.start;
     return new FNativa(loc?.line,loc?.column,exp, FNATIVA_T.TOSTRING);
   }
-    / _ toLowertkn "(" _ exp:expresion _ ")"
+    / _ toLowertkn "(" _ exp:expresion  ")"
   {
     const loc = location()?.start;
     return new FNativa(loc?.line,loc?.column,exp, FNATIVA_T.TOLOWER);
   }
-    / _ toUppertkn "(" _ exp:expresion _ ")"
+    / _ toUppertkn "(" _ exp:expresion  ")"
   {
     const loc = location()?.start;
     return new FNativa(loc?.line,loc?.column,exp, FNATIVA_T.TOUPPER);
   }
-  / _ typeOftkn  _ exp:terminal _ 
+  / _ typeOftkn  _ exp:terminal 
   {
     const loc = location()?.start;
     return new FNativa(loc?.line,loc?.column,exp, FNATIVA_T.TYPEOF);
@@ -360,12 +393,29 @@ SimpleComment
 EndComment
   = "\r" / "\n" / "\r\n"
 
+ID "identificador"
+  = !reservada  [a-zA-Z]([a-zA-Z]/[0-9]/"_")*  { return text(); }
 
+reservada 
+=  ParseInttkn 
+/ParseFloattkn
+/ToStringtkn
+/toLowertkn
+/toUppertkn
+/typeOftkn
+/ifToken 
+/imprimirToken 
+/tknFalse
+/tknTrue
 
 _ "Whitespace"
   = [ \t\n\r]*
 
-epsilon = !.
+
+epsilon = !. 
+epsilon2 = ''
+
+
 
 ifToken  = "if" 
 

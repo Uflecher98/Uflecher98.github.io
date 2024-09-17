@@ -12,7 +12,7 @@ class Asignacion extends Instruction {
   }
 
   execute(env) {
-    console.log("Asignacion de variable");
+    console.log("Asignacion de variable======================================================================");
 
     let resultado = this.expresion.execute(env);
     if (resultado instanceof Error) {

@@ -13,6 +13,8 @@ class Environment {
     this.consola = "";
   }
 
+
+
    getconsola() {
     console.log("valor consola "+ this.consola);
     return this.consola;

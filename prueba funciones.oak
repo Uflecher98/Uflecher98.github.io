@@ -1,0 +1,8 @@
+void Funcion (int su, string o){
+int suma=2;
+int resta=9-6;
+int multi=2*8;
+int d=2*8;
+System.out.println(suma);
+}
+System.out.println("hola mundo");
