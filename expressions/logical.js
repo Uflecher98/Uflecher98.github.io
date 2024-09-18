@@ -27,7 +27,6 @@ class Logica extends Expression {
       return null;
     } else if (derecho.type == Type.BOOLEAN) {
       let booleano = !derecho.value;
-      console.log("Logica igual a " + booleano);
       let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
       return respuesta;
     }
@@ -47,12 +46,10 @@ class Logica extends Expression {
 
         if(this.op==0){     //========================================================================== AND &&
           let booleano = izquierdo.value && derecho.value;
-            console.log("Logica igual a " + booleano);
             let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
             return respuesta;
         } else if (this.op==1){ //========================================================================== OR ||
           let booleano = izquierdo.value || derecho.value;
-            console.log("Logica igual a " + booleano);
             let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
             return respuesta;
         } 

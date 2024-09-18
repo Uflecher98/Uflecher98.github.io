@@ -6,6 +6,16 @@ let arrIns = new Array();
 let paramFunciones = new Array();
 let llevaParametro;
 
+let InstFor = new Array();
+let InstWhile = new Array();
+
+const INTERMEDIA ={
+    IF: 1,
+    SWITCH: 2,
+    FOR: 3,  
+    WHILE: 4,
+  };
+
   const FNATIVA_T ={
     PARSEINT: 1,
     PARSEFLOAT: 2,
@@ -81,7 +91,7 @@ declaracion
 
 // ================================================================================= ASIGNACION
 asignacion
-  = _ id:ID "=" _ expr:expresion ";" _ {
+  = _ id:ID _ "=" _ expr:expresion ";" _ {
     console.log("============================================ASIGNACION");
     const loc = location()?.start;
     return new Asignacion(loc?.line, loc?.column, id, expr);
@@ -95,15 +105,15 @@ imprimir
     return new Imprimir(loc?.line, loc?.column, expr);
   }
 
-imprimibles
-= inst:imprimible list:imprimiblep
-
-imprimiblep
-= list:imprimibles ","
-/ ''
 
 imprimible
-= expresion
+= exp:expresion list:imprimiblep
+
+imprimiblep
+= "," list:imprimiblep 
+/ epsilon2
+
+
 
   
 // ================================================================================= FUNCION
@@ -169,26 +179,136 @@ instruccionesfp
   / epsilon2
 
 instruccionf
-  = d:declaracion { console.log("declaracion de instruccion f"); console.log(d instanceof Declaracion); arrIns.push(d);}
+  = d:declaracion {  arrIns.push(d);}
   / a:asignacion { arrIns.push(a);}
-  / inst_if
-  / i:imprimir { console.log("imprimir f"); arrIns.push(i);}
+  / ifIns:inst_if { arrIns.push(ifIns);}
+  / switchIns:InstruccionSwitch { arrIns.push(switchIns);}
+  / whileIns:InstruccionWhile { arrIns.push(whileIns);}
+  / forIns:InstruccionFor { arrIns.push(forIns);}
+  / i:imprimir {  arrIns.push(i);}
+
+
 
 // ================================================================================= IF 
-inst_if
-  = "if" "(" expr:expresion ")" "{" inst:instruccionesf "}" r_if
-
-r_if
-  = b_else+
-  / epsilon
-
-b_else
-  = "else" else_if
-
-else_if
-  = "{" inst:instruccionesf "}" 
-  / inst_if 
   
+/*IF SIMPLE*/
+inst_if
+=
+    SIMPLEIF            
+    /*IF - ELSE IF'S*/
+    /  ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}" _ ELSEIFSINS 
+
+    /*IF - ELSE*/
+    / ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}" _  elseToken _ "{" _ inste:instruccionesf _ "}" _
+        
+
+    /*IF - ELSE IF'S - ELSE */ 
+    / ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}" _ ELSEIFSINS elseToken _ "{" _ inste:instruccionesf _ "}" _
+                                 
+
+
+SIMPLEIF =
+  ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}"   
+
+
+ELSEIFSINS = elseToken SIMPLEIF ELSEIFINSPRIMA
+
+ELSEIFINSPRIMA =  elseToken SIMPLEIF  ELSEIFINSPRIMA
+  / epsilon2
+
+// =========================================================================================== SWITCH
+
+InstruccionSwitch 
+=  switchToken "(" expr:expresion ")" _ "{" _ cuerpoSwitch _ "}"
+
+cuerpoSwitch 
+= listaCases produDefault
+
+listaCases				   	
+  = caseToken elemCase listaPrima 	
+ 
+listaPrima 
+  = caseToken listaPrima 
+  / epsilon2 
+
+elemCase 
+=  expresion ":" instruccionesf  breakToken ";"
+
+produDefault 
+= defaultToken ":" instruccionesf 
+/ epsilon2
+
+// =========================================================================================== FOR arreglo InstFor
+
+/*
+for (int i = 1; i <= 5; i++) {
+System.out.println(i);
+}
+*/
+
+InstruccionFor 
+= forToken _ "(" _  inicio:inicioFor  fin:expresion ";" paso:asignacionFor ")" _ "{" _   instruccionesfor _ "}" _ {
+  const loc = location()?.start;
+  let instruccionesFor = InstFor;
+    InstFor = [];
+  return new For(loc?.line, loc?.column, inicio, fin, paso, instruccionesFor);
+}
+
+inicioFor 
+= d:declaracion {return d;}
+/ a:asignacion {return a;}
+
+asignacionFor
+  = _ id:ID "=" _ expr:expresion  _ {
+    const loc = location()?.start;
+    return new Asignacion(loc?.line, loc?.column, id, expr);
+  }
+
+  instruccionesfor 
+  = inst:instruccionfor list:instruccionesforp 
+
+instruccionesforp
+  = ins:instruccionesfor  
+  / epsilon2
+
+instruccionfor
+  = d:declaracion {  InstFor.push(d);}
+  / a:asignacion { InstFor.push(a);}
+  / ifIns:inst_if { InstFor.push(ifIns);}
+  / switchIns:InstruccionSwitch { InstFor.push(switchIns);}
+  / whileIns:InstruccionWhile { InstFor.push(whileIns);}
+  / forIns:InstruccionFor { InstFor.push(forIns);}
+  / i:imprimir {  InstFor.push(i);}
+
+
+// ===========================================================================================  WHILE
+/*while (true) {
+//sentencias
+}*/
+
+InstruccionWhile 
+= whileToken "(" expr:expresion ")" "{" instruccionesWhile "}" {
+  const loc = location()?.start;
+  let instruWhile = InstWhile;
+    InstWhile = [];
+  return new While(loc?.line, loc?.column, expr, instruWhile);
+}
+
+  instruccionesWhile 
+  = inst:instruccionWhile list:instruccionesWhilep 
+
+instruccionesWhilep
+  = ins:instruccionesWhile  
+  / epsilon2
+
+instruccionWhile
+  = d:declaracion {  InstWhile.push(d);}
+  / a:asignacion { InstWhile.push(a);}
+  / ifIns:inst_if { InstWhile.push(ifIns);}
+  / switchIns:InstruccionSwitch { InstWhile.push(switchIns);}
+  / whileIns:InstruccionWhile { InstWhile.push(whileIns);}
+  / forIns:InstruccionFor { InstWhile.push(forIns);}
+  / i:imprimir {  InstWhile.push(i);}
 
 // ================================================================================= EXPRESIONES
 expresion
@@ -348,6 +468,9 @@ terminal
     const loc = location()?.start;
     return new Literal(loc?.line, loc?.column, valor, Type.IDENTIFICADOR);
   }
+    /valor:nullToken{
+    return null;
+  }  
   
 // ================================================================================= TIPOS
 tipo
@@ -407,6 +530,39 @@ reservada
 /imprimirToken 
 /tknFalse
 /tknTrue
+/nullToken 
+/switchToken
+/elseToken
+/caseToken 
+/breakToken
+/defaultToken
+/whileToken
+/forToken
+/continueToken
+/returnToken
+
+
+
+nullToken 
+= "null"
+switchToken
+= "switch"
+elseToken
+= "else"
+caseToken
+= "case" 
+breakToken
+= "break"
+defaultToken
+= "default"
+whileToken
+= "while"
+forToken
+= "for"
+continueToken
+= "continue"
+returnToken
+= "return"
 
 _ "Whitespace"
   = [ \t\n\r]*

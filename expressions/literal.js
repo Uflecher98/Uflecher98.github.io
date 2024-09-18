@@ -19,7 +19,7 @@ class Literal extends Expression {
       case Type.STRING:
         
         temp.value = temp.value.toString().replace(/"/g, "");
-        console.log("LITERAL/valor string: "+temp.value);
+
         break;
       case Type.INT:
         temp.value = parseInt(temp.value, 10);
@@ -39,7 +39,6 @@ class Literal extends Expression {
         if (symbol === null) {
           let error = new Error(temp.line, temp.column, "Error Semantico", "Variable no existe");
           env.agregarError(error);
-          console.log('error semantico. la variable no existe');
           return;
         }
         temp.value = symbol.value;

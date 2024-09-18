@@ -15,5 +15,7 @@ module.exports = {
     Imprimir: "../instructions/imprimir.js",
     FNativa: "../instructions/fnativa.js",
     Funcion:"../instructions/funcion.js",
+    For: "../instructions/for.js",
+    While: "../instructions/while.js",
   },
 };

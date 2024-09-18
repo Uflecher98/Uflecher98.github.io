@@ -4,5 +4,16 @@ int resta=9-6;
 int multi=2*8;
 int d=2*8;
 System.out.println(suma);
+
+
+for (int i = 1; i <= 5; i=i+1) {
+System.out.println(i);
+}
+
+while (suma<10){
+System.out.println(suma);
+suma = suma+1;
+}
+
 }
 System.out.println("hola mundo");

@@ -16,7 +16,7 @@ class Environment {
 
 
    getconsola() {
-    console.log("valor consola "+ this.consola);
+   // console.log("valor consola "+ this.consola);
     return this.consola;
   }
    setconsola(value) {
@@ -62,7 +62,7 @@ class Environment {
   #find_symbol(id) {
     for(const iterator of this.#tabla_simbolos) {
       if(iterator[0] === id) {
-        console.log(iterator[1]);
+       // console.log(iterator[1]);
         return iterator[1];
       }
     }
@@ -82,8 +82,8 @@ asignar_valor(id, root, expresion){
 
   for(const element of root.#tabla_simbolos) {
     if(element[0] === id) {
-      console.log("element 1 valor: "+element[1].type);
-      console.log("expresion valor: "+expresion.type);
+     // console.log("element 1 valor: "+element[1].type);
+     // console.log("expresion valor: "+expresion.type);
 
       if(element[1].type == expresion.type){
         element[1].value = expresion.value;
@@ -94,7 +94,7 @@ asignar_valor(id, root, expresion){
       }
   
     } else{
-      console.log(element[0]);
+    //  console.log(element[0]);
     }
   }
 
@@ -103,7 +103,7 @@ asignar_valor(id, root, expresion){
 }
 
   buscar_variable(id) {
-    console.log("buscar_variable ENTORNO:"+this);
+  //  console.log("buscar_variable ENTORNO:"+this);
     return this.#find_variable(id, this);
     
   }
@@ -111,17 +111,16 @@ asignar_valor(id, root, expresion){
   #find_variable(id, root) {
     console.log(root instanceof Environment);
     if(root === null || root === undefined) {
-      console.log("env/find_variable: retornando null");
+      //console.log("env/find_variable: retornando null");
       return null;
     } else{
-      console.log("LLega???");
       let current = root.#tabla_simbolos;
       for(const element of current) {
-        console.log("Ejecutando FOR ");
-        console.log("element 0:" +element[0]);
-        console.log("id:" +id);
+        //console.log("Ejecutando FOR ");
+        ///console.log("element 0:" +element[0]);
+        //console.log("id:" +id);
         if(element[0] === id) {
-          console.log("element"+element[1].value);
+         // console.log("element"+element[1].value);
           return element[1];
         }
       }
