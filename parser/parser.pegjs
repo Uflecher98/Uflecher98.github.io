@@ -8,6 +8,7 @@ let llevaParametro;
 
 let InstFor = new Array();
 let InstWhile = new Array();
+let InsIf = new Array();
 
 const INTERMEDIA ={
     IF: 1,
@@ -141,7 +142,6 @@ instruccion
 funcion
   = _ type:tipo id:ID _params:f_params "{" _ inst:instruccionesf _ "}" {  
     const loc = location()?.start;
-   
     let aux = arrIns;
     arrIns = [];
     let auxParam = paramFunciones;
@@ -193,33 +193,34 @@ instruccionf
   
 /*IF SIMPLE*/
 inst_if
-=
-    SIMPLEIF            
-    /*IF - ELSE IF'S*/
-    /  ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}" _ ELSEIFSINS 
+=_ ifToken "(" expr:expresion ")" _ "{" _ instruccionesIf _ "}" {
+ const loc = location()?.start;
+  let instruIf = InsIf;
+    InsIf = [];
+  return new If(loc?.line, loc?.column, expr, instruIf);
+}
 
-    /*IF - ELSE*/
-    / ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}" _  elseToken _ "{" _ inste:instruccionesf _ "}" _
-        
+  instruccionesIf 
+  = inst:instruccionIf list:instruccionesIfp 
 
-    /*IF - ELSE IF'S - ELSE */ 
-    / ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}" _ ELSEIFSINS elseToken _ "{" _ inste:instruccionesf _ "}" _
-                                 
-
-
-SIMPLEIF =
-  ifToken "(" expr:expresion ")" _ "{" _ inst:instruccionesf _ "}"   
-
-
-ELSEIFSINS = elseToken SIMPLEIF ELSEIFINSPRIMA
-
-ELSEIFINSPRIMA =  elseToken SIMPLEIF  ELSEIFINSPRIMA
+instruccionesIfp
+  = ins:instruccionesIf  
   / epsilon2
+
+instruccionIf
+  = d:declaracion {  InsIf.push(d);}
+  / a:asignacion { InsIf.push(a);}
+  / ifIns:inst_if { InsIf.push(ifIns);}
+  / switchIns:InstruccionSwitch { InsIf.push(switchIns);}
+  / whileIns:InstruccionWhile { InsIf.push(whileIns);}
+  / forIns:InstruccionFor { InsIf.push(forIns);}
+  / i:imprimir {  InsIf.push(i);}
+
 
 // =========================================================================================== SWITCH
 
 InstruccionSwitch 
-=  switchToken "(" expr:expresion ")" _ "{" _ cuerpoSwitch _ "}"
+= _ switchToken "(" expr:expresion ")" _ "{" _ cuerpoSwitch _ "}"
 
 cuerpoSwitch 
 = listaCases produDefault
@@ -247,7 +248,7 @@ System.out.println(i);
 */
 
 InstruccionFor 
-= forToken _ "(" _  inicio:inicioFor  fin:expresion ";" paso:asignacionFor ")" _ "{" _   instruccionesfor _ "}" _ {
+= _ forToken _ "(" _  inicio:inicioFor  fin:expresion ";" paso:asignacionFor ")" _ "{" _   instruccionesfor _ "}" _ {
   const loc = location()?.start;
   let instruccionesFor = InstFor;
     InstFor = [];
