@@ -69,23 +69,29 @@ instruccion
   / inst:imprimir 
   / inst:funcion
   /inst:declaracion
+  /inst:llamarFuncion
+  /SimpleComment
 
-
+llamarFuncion 
+= _ id:ID "(" _ ")" ";"  {
+  const loc = location()?.start;
+    return new LlamarFuncion(loc?.line, loc?.column, id);
+}
 
 // ================================================================================= DECLARACION
 declaracion
   = _ type:tipo id:ID _"=" expr:expresion ";" _ {
-    console.log("============================================DECLARACION");
+   
     const loc = location()?.start;
     return new Declaracion(loc?.line, loc?.column, id, type, expr);
   }
 /_  type:tipo id:ID _ ";" _ {
-  console.log("============================================DECLARACION");
+  
   const loc = location()?.start;
   return new Declaracion(loc?.line, loc?.column, id, type, null);
 }
 / _ "var" _  id:ID _ "="  expr:expresion  ";"_ {
-  console.log("============================================DECLARACION");
+  
     const loc = location()?.start;
     return new Declaracion(loc?.line, loc?.column, id, null, expr);
   }
@@ -93,7 +99,7 @@ declaracion
 // ================================================================================= ASIGNACION
 asignacion
   = _ id:ID _ "=" _ expr:expresion ";" _ {
-    console.log("============================================ASIGNACION");
+  
     const loc = location()?.start;
     return new Asignacion(loc?.line, loc?.column, id, expr);
   }
@@ -101,7 +107,7 @@ asignacion
 // ================================================================================= IMPRIMIR
 imprimir 
   = _ imprimirToken "(" expr:expresion _ ");"_ {  // Colocar en lugar de expresion un imprimible?
-    console.log("Entra produccion imprimir");
+   
     const loc = location()?.start;
     return new Imprimir(loc?.line, loc?.column, expr);
   }
@@ -186,6 +192,8 @@ instruccionf
   / whileIns:InstruccionWhile { arrIns.push(whileIns);}
   / forIns:InstruccionFor { arrIns.push(forIns);}
   / i:imprimir {  arrIns.push(i);}
+  / ll:llamarFuncion {  arrIns.push(ll);}
+    /SimpleComment
 
 
 
@@ -215,6 +223,8 @@ instruccionIf
   / whileIns:InstruccionWhile { InsIf.push(whileIns);}
   / forIns:InstruccionFor { InsIf.push(forIns);}
   / i:imprimir {  InsIf.push(i);}
+   / ll:llamarFuncion {  InsIf.push(ll);}
+     /SimpleComment
 
 
 // =========================================================================================== SWITCH
@@ -280,6 +290,8 @@ instruccionfor
   / whileIns:InstruccionWhile { InstFor.push(whileIns);}
   / forIns:InstruccionFor { InstFor.push(forIns);}
   / i:imprimir {  InstFor.push(i);}
+   / ll:llamarFuncion {  InstFor.push(ll);}
+     /SimpleComment
 
 
 // ===========================================================================================  WHILE
@@ -310,6 +322,8 @@ instruccionWhile
   / whileIns:InstruccionWhile { InstWhile.push(whileIns);}
   / forIns:InstruccionFor { InstWhile.push(forIns);}
   / i:imprimir {  InstWhile.push(i);}
+    / ll:llamarFuncion {  InstWhile.push(ll);}
+      /SimpleComment
 
 // ================================================================================= EXPRESIONES
 expresion
@@ -317,7 +331,7 @@ expresion
 
 expresion_logica
   = e:expresion_relacional op:(_("&&"/"||") _ expresion_relacional )*   {
-    console.log("expresion logica");
+    
     return op.reduce(function(result, element){
       const loc = location()?.start;
       if(element[1] === "&&") return new Logical(loc?.line, loc?.column, result, element[3], LOGICAL_OP.AND);
@@ -343,7 +357,7 @@ notToken
 
 expresion_relacional
   = e:expresion_numerica op:(_(">="/"<="/">"/"<"/"=="/"!=")_ expresion_numerica)* {
-    console.log("expresion relacional op");
+   
     return op.reduce(function(result, element){
       const loc = location()?.start;
       if(element[1] === ">") return new Relational(loc?.line,loc?.column, result, element[3], RELATIONAL_OP.MAYOR_QUE);
@@ -358,7 +372,7 @@ expresion_relacional
 
 expresion_numerica
   = head:Term tail:(_("+"/"-")_ Term)* {
-    console.log("expresion numerica");
+    
     return tail.reduce(function(result, element) {
       const loc = location()?.start;
         if (element[1] === "+") { return new Arithmetic(loc?.line,loc?.column, result, element[3], ARITHMETIC_OP.MAS);  }

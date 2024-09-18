@@ -15,6 +15,34 @@ class Environment {
 
 
 
+getFuncion(){
+
+}
+
+encuentraFuncion(id){
+  return this.buscarF(id, this);
+
+}
+
+buscarF(id,root){
+  if(root === null || root === undefined) {
+    return null;
+  }
+
+  let current = root.#tabla_funciones;
+  for(const element of current) {
+    if(element[0] === id) {
+      return element[1];
+    }
+  }
+
+  return this.buscarF(id, root.parent);
+
+}
+
+
+
+
    getconsola() {
    // console.log("valor consola "+ this.consola);
     return this.consola;
@@ -129,6 +157,29 @@ asignar_valor(id, root, expresion){
 
     return this.#find_variable(id, root.parent);
   }
+
+  setFuncion(funcion){
+    if(this.buscarFuncion(funcion.id) === null) {
+      this.#tabla_funciones.set(funcion.id, funcion);
+      return 1;
+    } else{
+      return 0;
+  
+    }
+  }
+  
+  buscarFuncion(nombre){
+    for(const iterator of this.#tabla_funciones) {
+      if(iterator[0] === nombre) {
+        console.log(iterator[1]);
+        return iterator[1];
+      }
+    }
+  
+    return null;
+  }
+
+
 
 }
 

@@ -15,30 +15,19 @@ class Funcion extends Instruction {
 
 
     execute(env) {
-        console.log("Es arreglo instrucciones: " + Array.isArray(this.instrucciones));
-        console.log("tamanio del arreglo: " + this.instrucciones.length);
+   
+            console.log("Entre a funcion");
 
-        if(this.parametros==null){
-            console.log("Sin parametros");
-        } else {
-            console.log("Es arreglo parametros: " + Array.isArray(this.parametros));
-            console.log("tamanio del arreglo de parametros : " + this.parametros.length);
+            let Funcion = this;
 
-            for (let i = 0; i < this.parametros.length; i++) {
-                this.parametros[i].execute(env);
-                 
-              }
+            let valor = env.setFuncion(Funcion);
 
-        }
-       
-
-        let resultado = this.instrucciones;
-
-            for (let i = 0; i < this.instrucciones.length; i++) {
-            resultado[i].execute(env);
-    
-          }
-
+            if(valor == 1){
+                console.log("Se añadio funcion");
+            } else {
+                let error = new Error(this.line, this.column, "Error Semantico", "No se pudo agregar funcion");
+                env.agregarError(error);
+            }
 
     }
 

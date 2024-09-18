@@ -17,5 +17,6 @@ module.exports = {
     Funcion:"../instructions/funcion.js",
     For: "../instructions/for.js",
     While: "../instructions/while.js",
+    LlamarFuncion: "../instructions/llamarFuncion.js",
   },
 };
