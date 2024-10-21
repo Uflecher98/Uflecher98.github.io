@@ -112,3 +112,5 @@ class Generador {
       this.Code.push("\tecall\n");
     }
   }
+
+  export default Generador;
