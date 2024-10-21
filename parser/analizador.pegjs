@@ -478,13 +478,13 @@ corcheteDer
 MultiComment
   = "/*"[^"*/"]*"*/" {
     const loc = location()?.start;
-    return new Comentarios(loc?.line, loc?.column);
+    return new Comentarios(loc?.line, loc?.column), text();
   }
 
   SimpleComment
   = "//" (!EndComment .)* EndComment {
     const loc = location()?.start;
-    return new Comentarios(loc?.line, loc?.column);
+    return new Comentarios(loc?.line, loc?.column, text());
   }
 
 EndComment

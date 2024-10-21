@@ -477,11 +477,11 @@ function peg$parse(input, options) {
   var peg$f41 = function() { return text().trim(); };
   var peg$f42 = function() {
     const loc = location()?.start;
-    return new Comentarios(loc?.line, loc?.column);
+    return new Comentarios(loc?.line, loc?.column), text();
   };
   var peg$f43 = function() {
     const loc = location()?.start;
-    return new Comentarios(loc?.line, loc?.column);
+    return new Comentarios(loc?.line, loc?.column, text());
   };
   var peg$f44 = function(type) {
     if(type[1] === "int") return Type.INT;

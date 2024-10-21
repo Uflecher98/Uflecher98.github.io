@@ -49,7 +49,7 @@ class Generador {
   }
 
   comment(text) {
-    this.Code.push(`#### ${text} \n`);
+    this.Code.push(`## ${text} \n`);
   }
 
   // load inmediate
