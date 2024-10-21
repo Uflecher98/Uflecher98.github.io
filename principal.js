@@ -44,9 +44,7 @@ const codigo = `float resta=7-5; resta="cadena";`;
   } catch (error) {
     console.error(error);
     return;
-  } finally {
-    // generar de erores y de TS.
-  }
+  } 
 
 
   /*for (let i = 0; i < resultado.length; i++) {
