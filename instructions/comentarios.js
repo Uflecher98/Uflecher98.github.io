@@ -13,7 +13,7 @@ class Comentarios extends Instruction {
   execute(env, gen) {
 
 console.log("Comentario en: "+this.line+', '+this.column);
-
+console.log(this.text);
 gen.comment(`${this.text}`);
 
 }
