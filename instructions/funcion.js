@@ -19,8 +19,14 @@ class Funcion extends Instruction {
             console.log("Entre a funcion");
 
             let Funcion = this;
+             let valor = env.setFuncion(Funcion);
 
-            let valor = env.setFuncion(Funcion);
+             console.log(this.parametros);
+
+             this.parametros.forEach((par)  => {
+                 console.log(par.nombre);
+                //console.log(ins);
+              });
 
             if(valor == 1){
                 console.log("Se añadio funcion");

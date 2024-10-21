@@ -1,6 +1,8 @@
+
+import Error from "../exceptions/error.js";
 import Expression from "../abstract/expression.js";
 import Type from "../symbol/type.js";
-import Error from "../exceptions/error.js";
+import Value from "../symbol/Value.js";
 
 class Literal extends Expression {
   constructor(line, column, value, type) {
@@ -11,38 +13,18 @@ class Literal extends Expression {
     this.type = type;
   }
 
-  execute(env) {
-    console.log("Entre execute literal");
-
-    let temp = new Literal(this.line, this.column, this.value, this.type);
+  execute(env, gen) {
+    let temp = gen.newTemp();
     switch (this.type) {
       case Type.STRING:
-        
-        temp.value = temp.value.toString().replace(/"/g, "");
-
-        break;
+        throw new Error("not implemented yet");
       case Type.INT:
-        temp.value = parseInt(temp.value, 10);
-        break;
-      case Type.CHAR:
-        temp.value = temp.value.toString().charAt(1);
-        break;
+        gen.addBr();
+        gen.comment("Agregando un Literal de tipo INTEGER");
+        gen.addLi("t0", this.value.toString());
+        return new Value("t0", true, this.type, [], [], []);
       case Type.FLOAT:
-        temp.value = parseFloat(temp.value, 10);
-        break;
-      case Type.BOOLEAN:
-        temp.value = (temp.value === "true" ? true : false);
-        break;
-      case Type.IDENTIFICADOR:
-        // tiene que ir a buscar a la TS
-        let symbol = env.buscar_variable(this.value);
-        if (symbol === null) {
-          let error = new Error(temp.line, temp.column, "Error Semantico", "Variable no existe");
-          env.agregarError(error);
-          return;
-        }
-        temp.value = symbol.value;
-        temp.type = symbol.type;
+        // ....
         break;
     }
     return temp;

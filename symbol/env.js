@@ -131,12 +131,14 @@ asignar_valor(id, root, expresion){
 }
 
   buscar_variable(id) {
-  //  console.log("buscar_variable ENTORNO:"+this);
+    console.log("buscar_variable ENTORNO:"+this);
     return this.#find_variable(id, this);
     
   }
 
   #find_variable(id, root) {
+    console.log("Aqui?");
+    console.log(">"+id+"<");
     console.log(root instanceof Environment);
     if(root === null || root === undefined) {
       //console.log("env/find_variable: retornando null");

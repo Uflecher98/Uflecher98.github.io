@@ -3,12 +3,13 @@ import symbol from "../symbol/symbol.js";
 import Error from "../exceptions/error.js";
 
 class Asignacion extends Instruction {
-  constructor(line, column, nombre, expresion) {
+  constructor(line, column, nombre, expresion, posA) {
     super();
     this.nombre = nombre;
     this.expresion = expresion;
     this.line = line;
     this.column = column;
+    this.posA = posA;
   }
 
   execute(env) {

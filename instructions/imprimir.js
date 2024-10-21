@@ -15,15 +15,26 @@ class Imprimir extends Instruction {
   execute(env) {
 
     console.log("Entrando a imprimir");
-    console.log("imprimir/expresion "+ this.expresion);
-    let resultado = this.expresion.execute(env);
-    if (resultado instanceof Error) { //Si la expresion es un error, lo agrega a Tabla de Errores
+    console.log("imprimir/arreglo de expresiones " );
+    console.log(this.expresion);
+    console.log(this.expresion instanceof Array);
+
+    let resultado = this.expresion;
+    for (let i = 0; i < resultado.length; i++) {
+      let aux= resultado[i].execute(env);
+      
+      if (resultado[i] instanceof Error) { //Si la expresion es un error, lo agrega a Tabla de Errores
         console.log("Error imprimir");
-        env.agregarError(resultado);
+        env.agregarError(aux.value);
     } else { //Si no es un error, actualizar la consola con la expresion 
-        console.log("Actualiza consola" + resultado.value);
-      env.actualizarConsola(resultado.value);
+
+        console.log("Actualiza consola" + aux.value);
+      env.actualizarConsola(aux.value);
     }
+    }
+
+    
+   
 
 
 }

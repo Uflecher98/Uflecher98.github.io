@@ -1,9 +1,9 @@
 float resta=7-5; 
 resta="cadena";
 System.out.println("cadena1");
-System.out.println(5*9);
+System.out.println(1, 5+2, 3, "hola", 5*8/9-85 );
 System.out.println(1);
-System.out.println('c');
+System.out.println('c', 500);
 var num1 = parseInt("1.99999");
 var num2 = 23;
 System.out.println(toString(num1) + toString(num2)); 
@@ -12,3 +12,34 @@ String cadena = toString(false) + "->" + toString(num1);
 System.out.println(cadena);
 System.out.println((2+6)>(8-4) && (2+6)<(8-4));
 System.out.println(!(2+6)<(8-4));
+
+int numero1 =10;
+float numero2 = 20.5;
+string cadena2 = "Hola mundo";
+char letra = 'a';
+
+    System.out.println("hola");
+int xdd = 0;
+while(xdd<5){
+System.out.println("hola desde while");
+xdd = xdd + 1;
+}
+
+       int numero333 = 3;
+
+for(int i=0;i<5;i=i+1){
+
+    System.out.println(i);
+  
+for(int x2=10;x2<15;x2=x2+1){
+System.out.println(x2);
+}
+}
+/*COment
+multi
+*/
+string D = "Hola D";
+boolean b = true;
+
+
+//cvoment simple

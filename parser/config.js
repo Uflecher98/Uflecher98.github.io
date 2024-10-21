@@ -1,7 +1,7 @@
 
 module.exports = {
   format: "es",
-  input: "parser.pegjs",
+  input: "analizador.pegjs",
   dependencies: {
     Arithmetic: "../expressions/arithmetic.js",
     Type: "../symbol/type.js",
@@ -18,5 +18,11 @@ module.exports = {
     For: "../instructions/for.js",
     While: "../instructions/while.js",
     LlamarFuncion: "../instructions/llamarFuncion.js",
+    Comentarios: "../instructions/comentarios.js",
+    Switch: "../instructions/switch.js",
+    Case: "../instructions/case.js",
+    DeclaracionArray: "../instructions/declaracionArray.js",
+    FArray: "../instructions/farray.js",
+    Transferencia: "../instructions/transferencia.js",
   },
 };

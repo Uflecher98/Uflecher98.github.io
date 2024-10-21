@@ -1,7 +1,9 @@
+
+
 import Expression from "../abstract/expression.js";
 import Type from "../symbol/type.js";
-import Literal from "./literal.js";
-import Error from "../exceptions/error.js";
+import Literal from "../expressions/literal.js";
+import Value from "../symbol/Value.js";
 
 class Arithmetic extends Expression {
   constructor(line, column, left, right, op) {
@@ -13,127 +15,40 @@ class Arithmetic extends Expression {
     this.column = column;
   }
 
-  execute(env) {
-
-    if(this.left ==null || this.right == null){
-      let error = new Error(this.line, this.column, "Error semantico", "Operando con null, no se puede realizar");
-      return error;
-    } else{
-      
-      switch (this.op) {
-        case 0: //SUMA
-         
-          const resultado_izdo = this.left.execute(env);
-          const resultado_derecho = this.right.execute(env);
-  
-          if (resultado_izdo.type == Type.INT) {
-            if (resultado_derecho.type == Type.INT) {
-              return new Literal(this.line, this.column, resultado_izdo.value + resultado_derecho.value, Type.INT);
-            } else if (resultado_derecho.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, resultado_izdo.value + resultado_derecho.value, Type.FLOAT);
-            }
-          } else if (resultado_izdo.type == Type.FLOAT) {
-            if (resultado_derecho.type == Type.INT) {
-              return new Literal(this.line, this.column, resultado_izdo.value + resultado_derecho.value, Type.FLOAT);
-            } else if (resultado_derecho.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, resultado_izdo.value + resultado_derecho.value, Type.FLOAT);
-            }
-          } else if (resultado_izdo.type == Type.STRING) {
-            if (resultado_derecho.type == Type.STRING) {
-              //quitar comillas
-              return new Literal(this.line, this.column, resultado_izdo.value + resultado_derecho.value, Type.STRING);
-            }
-          }
-  
-  
-        case 1: //RESTA 
-
-          if (this.left == null) {
-            const resultado_derecho_resta = this.right.execute(env);
-            if (resultado_derecho_resta.type == Type.INT) {
-              return new Literal(this.line, this.column, - resultado_derecho_resta.value, Type.INT);
-            } else if (resultado_derecho_resta.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, - resultado_derecho_resta.value, Type.FLOAT);
-            }
-  
-          } else {
-            const resultado_izdo_resta = this.left.execute(env);
-            const resultado_derecho_resta = this.right.execute(env);
-            if (resultado_izdo_resta.type == Type.INT) {
-              if (resultado_derecho_resta.type == Type.INT) {
-                return new Literal(this.line, this.column, resultado_izdo_resta.value - resultado_derecho_resta.value, Type.INT);
-              } else if (resultado_derecho_resta.type == Type.FLOAT) {
-                return new Literal(this.line, this.column, resultado_izdo_resta.value - resultado_derecho_resta.value, Type.FLOAT);
-              }
-            } else if (resultado_izdo_resta.type == Type.FLOAT) {
-              if (resultado_derecho_resta.type == Type.INT) {
-                return new Literal(this.line, this.column, resultado_izdo_resta.value - resultado_derecho_resta.value, Type.FLOAT);
-              } else if (resultado_derecho_resta.type == Type.FLOAT) {
-                return new Literal(this.line, this.column, resultado_izdo_resta.value - resultado_derecho_resta.value, Type.FLOAT);
-              }
-            }
-  
-          }
-  
-  
-        case 2: //MULTIPLICACION
-
-          const izdo_multi = this.left.execute(env);
-          const dercho_multi = this.right.execute(env);
-  
-          if (izdo_multi.type == Type.INT) {
-            if (dercho_multi.type == Type.INT) {
-              return new Literal(this.line, this.column, izdo_multi.value * dercho_multi.value, Type.INT);
-            } else if (dercho_multi.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, izdo_multi.value * dercho_multi.value, Type.FLOAT);
-            }
-          } else if (izdo_multi.type == Type.FLOAT) {
-            if (dercho_multi.type == Type.INT) {
-              return new Literal(this.line, this.column, izdo_multi.value * dercho_multi.value, Type.FLOAT);
-            } else if (dercho_multi.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, izdo_multi.value * dercho_multi.value, Type.FLOAT);
-            }
-          }
-        case 3:
-
-          const izdo_div = this.left.execute(env);
-          const dercho_divi = this.right.execute(env);
-  
-          if (izdo_div.type == Type.INT) {
-            if (dercho_divi.type == Type.INT) {
-              return new Literal(this.line, this.column, izdo_div.value / dercho_divi.value, Type.INT);
-            } else if (dercho_divi.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, izdo_div.value / dercho_divi.value, Type.FLOAT);
-            }
-          } else if (izdo_div.type == Type.FLOAT) {
-            if (dercho_divi.type == Type.INT) {
-              return new Literal(this.line, this.column, izdo_div.value / dercho_divi.value, Type.FLOAT);
-            } else if (dercho_divi.type == Type.FLOAT) {
-              return new Literal(this.line, this.column, izdo_div.value / dercho_divi.value, Type.FLOAT);
-            }
-          }
-        case 4:
-
-          const izdo_modulo = this.left.execute(env);
-          const dercho_modulo = this.right.execute(env);
-  
-          if (izdo_modulo.type == Type.INT) {
-            if (dercho_modulo.type == Type.INT) {
-              return new Literal(this.line, this.column, izdo_modulo.value % dercho_modulo.value, Type.INT);
-            }
-          }
-        default:
-          let error = new Error(this.line, this.column, "Error semantico", "Operacion invalida");
-          return error;
-      }
+  execute(env, gen) {
+    // manejarlo a nivel de stack.
+    const resultado_izdo = this.left.execute(env, gen);
+    if (this.left instanceof Arithmetic === false) {
+      gen.comment("Moviendo el valor cargado al registo temporal t1");
+      gen.addMove("t1", "t0");
     }
 
+    const resultado_derecho = this.right.execute(env, gen);
+    gen.comment("Moviendo el valor cargado al registo temporal t2");
+    gen.addMove("t2", "t0");
 
+    gen.addBr();
+    gen.comment(`Realizando operacion: ${this.op}`);
 
+    if (this.op === 0) {
+      gen.addOperation("add", "t1", "t1", "t2");
 
+      return new Value("t1", true, Type.INTEGER, [], [], []);
+    } else if (this.op === 1) {
+      gen.addOperation("sub", "t1", "t1", "t2");
+      return new Value("t1", true, Type.INTEGER, [], [], []);
+    } else if (this.op === 2) {
+      gen.addOperation("mul", "t1", "t1", "t2");
+      return new Value("t1", true, Type.INTEGER, [], [], []);
+    } else if (this.op === 3) {
+      if (resultado_derecho.value === 0) {
+        throw new Error("Division por cero");
+      }
 
+      gen.addOperation("div", "t1", "t1", "t2");
+      return new Value("t1", true, Type.INTEGER, [], [], []);
+    }
   }
-
 }
 
 export default Arithmetic;

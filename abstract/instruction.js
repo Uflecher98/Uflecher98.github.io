@@ -1,5 +1,5 @@
 class Instruction {
-    execute(env) {
+    execute(env, gen) {
       throw new Error("Subclasses must implement execute() method");
     }
   }

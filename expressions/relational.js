@@ -2,6 +2,8 @@ import Expression from "../abstract/expression.js";
 import Error from "../exceptions/error.js";
 import Type from "../symbol/type.js";
 import Literal from "./literal.js";
+import Value from "../symbol/Value.js";
+
 class Relational extends Expression {
   constructor(line, column, left, right, op) {
     super();
@@ -12,127 +14,66 @@ class Relational extends Expression {
     this.column = column;
   }
 
-  /* MENOR_QUE: 0,
-   MENOR_IGUAL: 1,
-   MAYOR_QUE: 2,
-   MAYOR_IGUAL: 3,
-   IGUAL: 4,
-   NO_IGUAL: 5,
-   */
+  execute(env, gen) {
+    // Implement the execution logic for the RELATIONAL expression
+    gen.comment("Iniciando operacion relacional");
+    let result_izdo = this.left.execute(env, gen);
+    gen.comment("Moviendo el valor cargado al registro t1");
+    gen.addMove("t1", "t0");
+    let result_derecho = this.right.execute(env, gen);
+    gen.comment("Moviendo el valor cargado al registro t2");
+    gen.addMove("t2", "t0");
 
-  execute(env) {
-    console.log("Executing RELATIONAL expression...");
+    gen.adBr();
 
-    const resultado_izdo = this.left.execute(env);
-    const resultado_derecho = this.right.execute(env);
-
-    if (resultado_izdo instanceof Error) {
-      env.agregarError(resultado_izdo);
-      return null;
-    } else if (resultado_derecho instanceof Error) {
-      env.agregarError(resultado_derecho);
-      return null;
-    } else {
-      if (this.op == 4) {
-        if (resultado_izdo.type == Type.INT || resultado_izdo.type == Type.FLOAT) {
-          if (resultado_derecho.type == Type.INT || resultado_derecho.type == Type.FLOAT) {
-            let booleano = resultado_izdo.value == resultado_derecho.value;
-            console.log("Relacional igual " + booleano);
-            let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-            return respuesta;
-          }
-        } else if (resultado_izdo.type == Type.BOOLEAN && resultado_derecho.type == Type.BOOLEAN
-          || resultado_izdo.type == Type.STRING && resultado_derecho.type == Type.STRING
-          || resultado_izdo.type == Type.CHAR && resultado_derecho.type == Type.CHAR) {
-          let booleano = resultado_izdo.value == resultado_derecho.value;
-
-          console.log("Relacional igual " + booleano);
-          let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-          return respuesta;
-        }
-
-      } else if (this.op == 5) {
-        if (resultado_izdo.type == Type.INT || resultado_izdo.type == Type.FLOAT) {
-          if (resultado_derecho.type == Type.INT || resultado_derecho.type == Type.FLOAT) {
-            let booleano = resultado_izdo.value != resultado_derecho.value;
-            console.log("Relacional igual " + booleano);
-            let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-            return respuesta;
-          }
-        } else if (resultado_izdo.type == Type.BOOLEAN && resultado_derecho.type == Type.BOOLEAN
-          || resultado_izdo.type == Type.STRING && resultado_derecho.type == Type.STRING
-          || resultado_izdo.type == Type.CHAR && resultado_derecho.type == Type.CHAR) {
-          let booleano = resultado_izdo.value != resultado_derecho.value;
-
-          console.log("Relacional igual " + booleano);
-          let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-          return respuesta;
-        }
-      }  else if (this.op == 0) { // =====================================================MENOR QUE
-        if (resultado_izdo.type == Type.INT || resultado_izdo.type == Type.FLOAT) {
-          if (resultado_derecho.type == Type.INT || resultado_derecho.type == Type.FLOAT) {
-            let booleano = resultado_izdo.value < resultado_derecho.value;
-            console.log("Relacional igual " + booleano);
-            let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-            return respuesta;
-          }
-        } else if (resultado_izdo.type == Type.CHAR && resultado_derecho.type == Type.CHAR) {
-          let booleano = resultado_izdo.value < resultado_derecho.value;
-
-          console.log("Relacional igual " + booleano);
-          let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-          return respuesta;
-        }
-      } else if (this.op == 1) { // =====================================================MENOR IGUAL QUE
-        if (resultado_izdo.type == Type.INT || resultado_izdo.type == Type.FLOAT) {
-          if (resultado_derecho.type == Type.INT || resultado_derecho.type == Type.FLOAT) {
-            let booleano = resultado_izdo.value <= resultado_derecho.value;
-            console.log("Relacional igual " + booleano);
-            let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-            return respuesta;
-          }
-        } else if (resultado_izdo.type == Type.CHAR && resultado_derecho.type == Type.CHAR) {
-          let booleano = resultado_izdo.value <= resultado_derecho.value;
-
-          console.log("Relacional igual " + booleano);
-          let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-          return respuesta;
-        }
-      } else if (this.op == 2) { // =====================================================MAYOR QUE
-        if (resultado_izdo.type == Type.INT || resultado_izdo.type == Type.FLOAT) {
-          if (resultado_derecho.type == Type.INT || resultado_derecho.type == Type.FLOAT) {
-            let booleano = resultado_izdo.value > resultado_derecho.value;
-            console.log("Relacional igual " + booleano);
-            let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-            return respuesta;
-          }
-        } else if (resultado_izdo.type == Type.CHAR && resultado_derecho.type == Type.CHAR) {
-          let booleano = resultado_izdo.value > resultado_derecho.value;
-
-          console.log("Relacional igual " + booleano);
-          let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-          return respuesta;
-        }
-      } else if (this.op == 3) {  // =====================================================MAYOR IGUAL QUE
-        if (resultado_izdo.type == Type.INT || resultado_izdo.type == Type.FLOAT) {
-          if (resultado_derecho.type == Type.INT || resultado_derecho.type == Type.FLOAT) {
-            let booleano = resultado_izdo.value >= resultado_derecho.value;
-            console.log("Relacional igual " + booleano);
-            let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-            return respuesta;
-          }
-        } else if (resultado_izdo.type == Type.CHAR && resultado_derecho.type == Type.CHAR) {
-          let booleano = resultado_izdo.value >= resultado_derecho.value;
-
-          console.log("Relacional igual " + booleano);
-          let respuesta = new Literal(this.line, this.column, booleano, Type.BOOLEAN);
-          return respuesta;
-        }
-      }
+    let trueLvl = "";
+    let falseLvl = "";
+    let result = undefined;
+    switch (this.op) {
+      case 0:
+        gen.comment(`${result_izdo} < ${result_derecho}`);
+        trueLvl = gen.newLabel();
+        falseLvl = gen.newLabel();
+        gen.addBlt("t1", "t2", trueLvl);
+        gen.addJump(falseLvl);
+        result = new Value("", false, Type.BOOLEAN, [], [], []);
+        result.falselvl.push(falseLvl);
+        result.truelvl.push(trueLvl);
+        return result;
+      case 1:
+        gen.comment(`${result_izdo} <= ${result_derecho}`);
+        trueLvl = gen.newLabel();
+        falseLvl = gen.newLabel();
+        gen.addBlt("t1", "t2", trueLvl);
+        //xor
+        gen.addJump(falseLvl);
+        result = new Value("", false, Type.BOOLEAN, [], [], []);
+        result.falselvl.push(falseLvl);
+        result.truelvl.push(trueLvl);
+        return result;
+        break;
+      case 2:
+        gen.comment(`${result_izdo} > ${result_derecho}`);
+        trueLvl = gen.newLabel();
+        falseLvl = gen.newLabel();
+        gen.addBlt("t1", "t2", trueLvl);
+        gen.addJump(falseLvl);
+        result = new Value("", false, Type.BOOLEAN, [], [], []);
+        result.falselvl.push(falseLvl);
+        result.truelvl.push(trueLvl);
+        break;
+      case 3:
+        gen.comment(`${result_izdo} >= ${result_derecho}`);
+        break;
+      case 4:
+        gen.comment(`${result_izdo} == ${result_derecho}`);
+        break;
+      case 5:
+        gen.comment(`${result_izdo} != ${result_derecho}`);
+        break;
+      default:
+        break;
     }
-    let error = new Error(this.line, this.column, "Error semantico", "Operacion relacional invalida");
-    return error;
-
   }
 }
 

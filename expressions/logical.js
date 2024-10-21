@@ -16,7 +16,7 @@ class Logica extends Expression {
     OR: 1,
     NOT: 2 */
 
-  execute(env) {
+  execute(env, gen) {
     
     console.log("Expresion logica");
 

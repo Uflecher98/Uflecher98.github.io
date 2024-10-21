@@ -1,0 +1,204 @@
+System.out.println("********** Declaracion de variables **********");
+
+System.out.println("1. Declaracion con tipo y valor");
+
+int numero1 =10;
+float numero2 = 20.5;
+string cadena = "Hola mundo";
+char letra = 'a';
+
+System.out.println(numero1);
+System.out.println(numero2);
+System.out.println(cadena);
+System.out.println(letra);
+System.out.println("");
+
+System.out.println("2. Declaracion con tipo y sin valor");
+
+int numero3; 
+float numero4;
+
+System.out.println(numero3);
+System.out.println(numero4);
+System.out.println("");
+
+System.out.println("3. Declaracion infiriendo el tipo");
+
+var numero5 = 10; 
+var numero6 = 20.5; 
+var cadena2 = "Hola mundo"; 
+var letra2 = 'a'; 
+
+System.out.println(numero5);
+System.out.println(numero6);
+System.out.println(cadena2);
+System.out.println(letra2);
+System.out.println("");
+
+
+
+System.out.println("********** Asignacion de variables **********"); 
+
+numero1 =20;
+numero2 = 30.5;
+cadena = "Adios mundo";
+letra = 'b';
+
+System.out.println(numero1);
+System.out.println(numero2);
+System.out.println(cadena);
+System.out.println(letra);
+System.out.println("");
+
+
+
+System.out.println("********** Operaciones aritmeticas **********");
+
+System.out.println("1. Suma");
+
+System.out.println(10 + 5); 
+System.out.println(10.5 + 5.5); 
+System.out.println(10 + 5.5); 
+System.out.println(10.5 + 5); 
+System.out.println(numero5+numero6); 
+System.out.println("");
+
+System.out.println("2. Resta");
+System.out.println(10 - 5); 
+System.out.println(10.5 - 5.5); 
+System.out.println(10 - 5.5); 
+System.out.println(10.5 - 5); 
+System.out.println(numero5-numero6); 
+System.out.println("");
+
+System.out.println("3. Multiplicacion");
+System.out.println(10 * 5); 
+System.out.println(10.5 * 5.5); 
+System.out.println(10 * 5.5); 
+System.out.println(10.5 * 5); 
+System.out.println(numero5*numero6); 
+System.out.println("");
+
+System.out.println("4. Division");
+System.out.println(10 / 5); 
+System.out.println(10.5 / 5.5); 
+System.out.println(10 / 5.5); 
+System.out.println(10.5 / 5); 
+System.out.println(numero5/numero6); 
+System.out.println("");
+
+System.out.println("5. Modulo");
+System.out.println(10 % 5); 
+System.out.println(10 % 3); 
+System.out.println("");
+
+System.out.println("6. Resta unaria");
+System.out.println(-10);
+System.out.println(-10.5); 
+System.out.println("");
+
+System.out.println("7. Compuesta");
+System.out.println(-2 + (10 + 5) * 2 / 3 + 5 % 2);
+System.out.println("");
+
+
+
+System.out.println("********** Operaciones Relacionales **********");
+
+System.out.println("1. Igualdad");
+System.out.println(10 == 10);
+System.out.println(10 == 5); 
+System.out.println(10.5 == 10.5); 
+System.out.println(10.5 == 5.5); 
+System.out.println(numero5 == numero6);
+System.out.println("");
+
+System.out.println("2. Diferencia");
+System.out.println(10 != 10); 
+System.out.println(10 != 5); 
+System.out.println(10.5 != 10.5); 
+System.out.println(10.5 != 5.5); 
+System.out.println(numero5 != numero6); 
+System.out.println("");
+
+System.out.println("3. Mayor que");
+System.out.println(10 > 5); 
+System.out.println(10 > 10); 
+System.out.println(10.5 > 5.5); 
+System.out.println(10.5 > 10.5); 
+System.out.println(numero5 > numero6);
+System.out.println("");
+
+System.out.println("4. Menor que");
+System.out.println(10 < 5); 
+System.out.println(10 < 10); 
+System.out.println(10.5 < 5.5); 
+System.out.println(10.5 < 10.5); 
+System.out.println(numero5 < numero6); 
+System.out.println("");
+
+System.out.println("5. Mayor o igual que");
+System.out.println(10 >= 5); 
+System.out.println(10 >= 10); 
+System.out.println(10.5 >= 5.5); 
+System.out.println(10.5 >= 10.5); 
+System.out.println(numero5 >= numero6); 
+System.out.println("");
+
+System.out.println("6. Menor o igual que");
+System.out.println(10 <= 5); 
+System.out.println(10 <= 10); 
+System.out.println(10.5 <= 5.5); 
+System.out.println(10.5 <= 10.5); 
+System.out.println(numero5 <= numero6); 
+System.out.println("");
+
+
+System.out.println("********** Operaciones Logicas **********");
+
+System.out.println("1. AND");
+System.out.println(true && true); 
+System.out.println(true && false); 
+System.out.println(false && true); 
+System.out.println(false && false); 
+System.out.println(10 == 10 && 5 == 5); 
+System.out.println(10 == 10 && 5 == 6); 
+System.out.println("");
+
+System.out.println("2. OR");
+System.out.println(true || true); 
+System.out.println(true || false); 
+System.out.println(false || true); 
+System.out.println(false || false); 
+System.out.println(10 == 10 || 5 == 5); 
+System.out.println(10 == 10 || 5 == 6); 
+System.out.println(10 == 11 || 5 == 6); 
+System.out.println("");
+
+System.out.println("3. NOT");
+System.out.println(!true); 
+System.out.println(!false); 
+System.out.println("");
+
+
+System.out.println("********** System.out.println **********");
+
+System.out.println(10.123);
+System.out.println(true);
+System.out.println(false); 
+System.out.println("");
+
+
+System.out.println("********** Manejo del valor nulo **********");
+
+System.out.println("1 Declaracion con tipo y valor incorrecto");
+
+int incorrectoNulo1 = "Hola mundo";
+System.out.println(incorrectoNulo1); 
+System.out.println("");
+
+System.out.println("2. Asignacion con tipo incorrecto");
+var incorrectoNulo2 = "Hola mundo";
+incorrectoNulo2 = 10; 
+System.out.println(incorrectoNulo2); 
+System.out.println("");

@@ -1,6 +1,8 @@
 
-import { parse } from "./parser/parser.js";
+//import { parse } from "./parser/parser.js";
+import { parse } from  "./parser/analizador.js";
 import Environment from "./symbol/env.js";
+import Generator from "./symbol/generador.js"
 
 const input = document.getElementById("Ingreso");
 const salida = document.getElementById("Consola");
@@ -23,35 +25,35 @@ const codigo = `float resta=7-5; resta="cadena";`;
   const global = new Environment(null);
 
 
+  const gen = new Generator();
+
   console.log("main/resultado: " + Array.isArray(resultado));
   console.log("main/tamanio: " + resultado.length);
+  console.log(resultado);
 
 
+  try {
+    for (let i = 0; i < resultado.length; i++) {
+      if (typeof resultado[i] == "string") {
+        continue;
+      }
+      resultado[i].execute(global, gen);
+    }
 
-
+    console.log(gen.getFinalCode()); // escribirlo en un archivo .s | imprimir en la consola.
+  } catch (error) {
+    console.error(error);
+    return;
+  } finally {
+    // generar de erores y de TS.
+  }
 
 
   /*for (let i = 0; i < resultado.length; i++) {
-    resultado[i].execute(global);
+    resultado[i].execute(global, gen);
   }*/
 
 
-
-
-  function recorrido(resul) {
-
-    try {
-      resul[0].execute(global);
-      let aux = resul[1];
-      recorrido(aux);
-    } catch (error) {
-      console.log("Error en principal.js: "+ error);
-    }
-
-
-  }
-
-  recorrido(resultado);
 
   let tablaSimbolos = global.obtenerTablaSimbolos();
   tablaSimbolos.forEach(function(valor, nombre){
@@ -69,17 +71,6 @@ const codigo = `float resta=7-5; resta="cadena";`;
   salida.value = global.getconsola();
 
 
- /* resultado[0].execute(global);
-  let resultado2 = resultado[1];
-
-  resultado2[0].execute(global);
-  let resultado3 = resultado2[1];
-
-  resultado3[0].execute(global);
-  let resultado4 = resultado3[1];
-
-  resultado4[0].execute(global);
-*/
 
 
 
