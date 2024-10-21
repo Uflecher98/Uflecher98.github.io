@@ -1,8 +1,6 @@
 import Instruction from "../abstract/instruction.js";
-import symbol from "../symbol/symbol.js";
 import Error from "../exceptions/error.js";
 
-import Instruction from "../abstract/instruction.js";
 import Symbol from "../symbol/symbol.js";
 import Type from "../symbol/type.js";
 
